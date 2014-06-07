@@ -3,7 +3,7 @@
 logs
 *.log
 
-secrets.js
+/config
 
 # Runtime data
 pids
