@@ -20,31 +20,31 @@ module.exports = {
 
   db: process.env.MONGODB|| 'mongodb://localhost:27017/test',
 
-  sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here',
+  sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here, i dont know what that is',
 
-  mailgun: {
-    user: process.env.MAILGUN_USER || 'postmaster@sandbox697fcddc09814c6b83718b9fd5d4e5dc.mailgun.org',
-    password: process.env.MAILGUN_PASSWORD || '29eldds1uri6'
-  },
+  // mailgun: {
+  //   user: process.env.MAILGUN_USER || 'postmaster@sandbox697fcddc09814c6b83718b9fd5d4e5dc.mailgun.org',
+  //   password: process.env.MAILGUN_PASSWORD || '29eldds1uri6'
+  // },
   
-  mandrill: {
-    user: process.env.MANDRILL_USER || 'hackathonstarterdemo',
-    password: process.env.MANDRILL_PASSWORD || 'E1K950_ydLR4mHw12a0ldA'
-  },
+  // mandrill: {
+  //   user: process.env.MANDRILL_USER || 'hackathonstarterdemo',
+  //   password: process.env.MANDRILL_PASSWORD || 'E1K950_ydLR4mHw12a0ldA'
+  // },
 
-  sendgrid: {
-    user: process.env.SENDGRID_USER || 'hslogin',
-    password: process.env.SENDGRID_PASSWORD || 'hspassword00'
-  },
+  // sendgrid: {
+  //   user: process.env.SENDGRID_USER || 'hslogin',
+  //   password: process.env.SENDGRID_PASSWORD || 'hspassword00'
+  // },
 
-  nyt: {
-    key: process.env.NYT_KEY || '9548be6f3a64163d23e1539f067fcabd:5:68537648'
-  },
+  // nyt: {
+  //   key: process.env.NYT_KEY || '9548be6f3a64163d23e1539f067fcabd:5:68537648'
+  // },
 
-  lastfm: {
-    api_key: process.env.LASTFM_KEY || 'c8c0ea1c4a6b199b3429722512fbd17f',
-    secret: process.env.LASTFM_SECRET || 'is cb7857b8fba83f819ea46ca13681fe71'
-  },
+  // lastfm: {
+  //   api_key: process.env.LASTFM_KEY || 'c8c0ea1c4a6b199b3429722512fbd17f',
+  //   secret: process.env.LASTFM_SECRET || 'is cb7857b8fba83f819ea46ca13681fe71'
+  // },
 
   facebook: {
     clientID: process.env.FACEBOOK_ID || '754220301289665',
