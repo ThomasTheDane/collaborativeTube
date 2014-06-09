@@ -1,12 +1,12 @@
 var secrets = require('../config/secrets');
-var nodemailer = require("nodemailer");
-var smtpTransport = nodemailer.createTransport('SMTP', {
-  service: 'SendGrid',
-  auth: {
-    user: secrets.sendgrid.user,
-    pass: secrets.sendgrid.password
-  }
-});
+//var nodemailer = require("nodemailer");
+//var smtpTransport = nodemailer.createTransport('SMTP', {
+//  service: 'SendGrid',
+//  auth: {
+//    user: secrets.sendgrid.user,
+//    pass: secrets.sendgrid.password
+//  }
+//});
 
 /**
  * GET /contact
@@ -52,12 +52,12 @@ exports.postContact = function(req, res) {
     text: body
   };
 
-  smtpTransport.sendMail(mailOptions, function(err) {
-    if (err) {
-      req.flash('errors', { msg: err.message });
-      return res.redirect('/contact');
-    }
-    req.flash('success', { msg: 'Email has been sent successfully!' });
-    res.redirect('/contact');
-  });
+//  smtpTransport.sendMail(mailOptions, function(err) {
+//    if (err) {
+//      req.flash('errors', { msg: err.message });
+//      return res.redirect('/contact');
+//    }
+//    req.flash('success', { msg: 'Email has been sent successfully!' });
+//    res.redirect('/contact');
+//  });
 };

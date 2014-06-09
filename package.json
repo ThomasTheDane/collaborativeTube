@@ -1,9 +1,9 @@
 {
-  "name": "hackathon-starter",
-  "version": "2.2.0",
+  "name": "ColaborativeTube",
+  "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
+    "url": "https://github.com/thomasnat1/collaborativeTube.git"
   },
   "scripts": {
     "start": "node app.js",
@@ -63,5 +63,7 @@
     "mocha": "^1.20.0",
     "multiline": "^0.3.4",
     "supertest": "^0.13.0"
-  }
+  },
+  "author": "Thomas Nattestad",
+  "license": "MIT"
 }

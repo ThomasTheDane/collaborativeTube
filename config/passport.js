@@ -1,12 +1,12 @@
 var _ = require('lodash');
 var passport = require('passport');
-var InstagramStrategy = require('passport-instagram').Strategy;
+//var InstagramStrategy = require('passport-instagram').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+//var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 var OAuthStrategy = require('passport-oauth').OAuthStrategy; // Tumblr
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy; // Venmo, Foursquare
 var User = require('../models/User');
@@ -24,46 +24,46 @@ passport.deserializeUser(function(id, done) {
 
 // Sign in with Instagram.
 
-passport.use(new InstagramStrategy(secrets.instagram,function(req, accessToken, refreshToken, profile, done) {
-  if (req.user) {
-    User.findOne({ instagram: profile.id }, function(err, existingUser) {
-      if (existingUser) {
-        req.flash('errors', { msg: 'There is already an Instagram account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
-        done(err);
-      } else {
-        User.findById(req.user.id, function(err, user) {
-          user.instagram = profile.id;
-          user.tokens.push({ kind: 'instagram', accessToken: accessToken });
-          user.profile.name = user.profile.name || profile.displayName;
-          user.profile.picture = user.profile.picture || profile._json.data.profile_picture;
-          user.profile.website = user.profile.website || profile._json.data.website;
-          user.save(function(err) {
-            req.flash('info', { msg: 'Instagram account has been linked.' });
-            done(err, user);
-          });
-        });
-      }
-    });
-  } else {
-    User.findOne({ instagram: profile.id }, function(err, existingUser) {
-      if (existingUser) return done(null, existingUser);
-
-      var user = new User();
-      user.instagram = profile.id;
-      user.tokens.push({ kind: 'instagram', accessToken: accessToken });
-      user.profile.name = profile.displayName;
-      // Similar to Twitter API, assigns a temporary e-mail address
-      // to get on with the registration process. It can be changed later
-      // to a valid e-mail address in Profile Management.
-      user.email = profile.username + "@instagram.com";
-      user.profile.website = profile._json.data.website;
-      user.profile.picture = profile._json.data.profile_picture;
-      user.save(function(err) {
-        done(err, user);
-      });
-    });
-  }
-}));
+//passport.use(new InstagramStrategy(secrets.instagram,function(req, accessToken, refreshToken, profile, done) {
+//  if (req.user) {
+//    User.findOne({ instagram: profile.id }, function(err, existingUser) {
+//      if (existingUser) {
+//        req.flash('errors', { msg: 'There is already an Instagram account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
+//        done(err);
+//      } else {
+//        User.findById(req.user.id, function(err, user) {
+//          user.instagram = profile.id;
+//          user.tokens.push({ kind: 'instagram', accessToken: accessToken });
+//          user.profile.name = user.profile.name || profile.displayName;
+//          user.profile.picture = user.profile.picture || profile._json.data.profile_picture;
+//          user.profile.website = user.profile.website || profile._json.data.website;
+//          user.save(function(err) {
+//            req.flash('info', { msg: 'Instagram account has been linked.' });
+//            done(err, user);
+//          });
+//        });
+//      }
+//    });
+//  } else {
+//    User.findOne({ instagram: profile.id }, function(err, existingUser) {
+//      if (existingUser) return done(null, existingUser);
+//
+//      var user = new User();
+//      user.instagram = profile.id;
+//      user.tokens.push({ kind: 'instagram', accessToken: accessToken });
+//      user.profile.name = profile.displayName;
+//      // Similar to Twitter API, assigns a temporary e-mail address
+//      // to get on with the registration process. It can be changed later
+//      // to a valid e-mail address in Profile Management.
+//      user.email = profile.username + "@instagram.com";
+//      user.profile.website = profile._json.data.website;
+//      user.profile.picture = profile._json.data.profile_picture;
+//      user.save(function(err) {
+//        done(err, user);
+//      });
+//    });
+//  }
+//}));
 
 // Sign in using Email and Password.
 
@@ -280,113 +280,113 @@ passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refre
 }));
 
 // Sign in with LinkedIn.
-
-passport.use(new LinkedInStrategy(secrets.linkedin, function(req, accessToken, refreshToken, profile, done) {
-  if (req.user) {
-    User.findOne({ linkedin: profile.id }, function(err, existingUser) {
-      if (existingUser) {
-        req.flash('errors', { msg: 'There is already a LinkedIn account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
-        done(err);
-      } else {
-        User.findById(req.user.id, function(err, user) {
-          user.linkedin = profile.id;
-          user.tokens.push({ kind: 'linkedin', accessToken: accessToken });
-          user.profile.name = user.profile.name || profile.displayName;
-          user.profile.location = user.profile.location || profile._json.location.name;
-          user.profile.picture = user.profile.picture || profile._json.pictureUrl;
-          user.profile.website = user.profile.website || profile._json.publicProfileUrl;
-          user.save(function(err) {
-            req.flash('info', { msg: 'LinkedIn account has been linked.' });
-            done(err, user);
-          });
-        });
-      }
-    });
-  } else {
-    User.findOne({ linkedin: profile.id }, function(err, existingUser) {
-      if (existingUser) return done(null, existingUser);
-      User.findOne({ email: profile._json.emailAddress }, function(err, existingEmailUser) {
-        if (existingEmailUser) {
-          req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with LinkedIn manually from Account Settings.' });
-          done(err);
-        } else {
-          var user = new User();
-          user.linkedin = profile.id;
-          user.tokens.push({ kind: 'linkedin', accessToken: accessToken });
-          user.email = profile._json.emailAddress;
-          user.profile.name = profile.displayName;
-          user.profile.location = profile._json.location.name;
-          user.profile.picture = profile._json.pictureUrl;
-          user.profile.website = profile._json.publicProfileUrl;
-          user.save(function(err) {
-            done(err, user);
-          });
-        }
-      });
-    });
-  }
-}));
+//
+//passport.use(new LinkedInStrategy(secrets.linkedin, function(req, accessToken, refreshToken, profile, done) {
+//  if (req.user) {
+//    User.findOne({ linkedin: profile.id }, function(err, existingUser) {
+//      if (existingUser) {
+//        req.flash('errors', { msg: 'There is already a LinkedIn account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
+//        done(err);
+//      } else {
+//        User.findById(req.user.id, function(err, user) {
+//          user.linkedin = profile.id;
+//          user.tokens.push({ kind: 'linkedin', accessToken: accessToken });
+//          user.profile.name = user.profile.name || profile.displayName;
+//          user.profile.location = user.profile.location || profile._json.location.name;
+//          user.profile.picture = user.profile.picture || profile._json.pictureUrl;
+//          user.profile.website = user.profile.website || profile._json.publicProfileUrl;
+//          user.save(function(err) {
+//            req.flash('info', { msg: 'LinkedIn account has been linked.' });
+//            done(err, user);
+//          });
+//        });
+//      }
+//    });
+//  } else {
+//    User.findOne({ linkedin: profile.id }, function(err, existingUser) {
+//      if (existingUser) return done(null, existingUser);
+//      User.findOne({ email: profile._json.emailAddress }, function(err, existingEmailUser) {
+//        if (existingEmailUser) {
+//          req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with LinkedIn manually from Account Settings.' });
+//          done(err);
+//        } else {
+//          var user = new User();
+//          user.linkedin = profile.id;
+//          user.tokens.push({ kind: 'linkedin', accessToken: accessToken });
+//          user.email = profile._json.emailAddress;
+//          user.profile.name = profile.displayName;
+//          user.profile.location = profile._json.location.name;
+//          user.profile.picture = profile._json.pictureUrl;
+//          user.profile.website = profile._json.publicProfileUrl;
+//          user.save(function(err) {
+//            done(err, user);
+//          });
+//        }
+//      });
+//    });
+//  }
+//}));
 
 // Tumblr API setup.
-
-passport.use('tumblr', new OAuthStrategy({
-    requestTokenURL: 'http://www.tumblr.com/oauth/request_token',
-    accessTokenURL: 'http://www.tumblr.com/oauth/access_token',
-    userAuthorizationURL: 'http://www.tumblr.com/oauth/authorize',
-    consumerKey: secrets.tumblr.consumerKey,
-    consumerSecret: secrets.tumblr.consumerSecret,
-    callbackURL: secrets.tumblr.callbackURL,
-    passReqToCallback: true
-  },
-  function(req, token, tokenSecret, profile, done) {
-    User.findById(req.user._id, function(err, user) {
-      user.tokens.push({ kind: 'tumblr', accessToken: token, tokenSecret: tokenSecret });
-      user.save(function(err) {
-        done(err, user);
-      });
-    });
-  }
-));
-
-// Foursquare API setup.
-
-passport.use('foursquare', new OAuth2Strategy({
-    authorizationURL: 'https://foursquare.com/oauth2/authorize',
-    tokenURL: 'https://foursquare.com/oauth2/access_token',
-    clientID: secrets.foursquare.clientId,
-    clientSecret: secrets.foursquare.clientSecret,
-    callbackURL: secrets.foursquare.redirectUrl,
-    passReqToCallback: true
-  },
-  function(req, accessToken, refreshToken, profile, done) {
-    User.findById(req.user._id, function(err, user) {
-      user.tokens.push({ kind: 'foursquare', accessToken: accessToken });
-      user.save(function(err) {
-        done(err, user);
-      });
-    });
-  }
-));
-
-// Venmo API setup.
-
-passport.use('venmo', new OAuth2Strategy({
-    authorizationURL: 'https://api.venmo.com/v1/oauth/authorize',
-    tokenURL: 'https://api.venmo.com/v1/oauth/access_token',
-    clientID: secrets.venmo.clientId,
-    clientSecret: secrets.venmo.clientSecret,
-    callbackURL: secrets.venmo.redirectUrl,
-    passReqToCallback: true
-  },
-  function(req, accessToken, refreshToken, profile, done) {
-    User.findById(req.user._id, function(err, user) {
-      user.tokens.push({ kind: 'venmo', accessToken: accessToken });
-      user.save(function(err) {
-        done(err, user);
-      });
-    });
-  }
-));
+//
+//passport.use('tumblr', new OAuthStrategy({
+//    requestTokenURL: 'http://www.tumblr.com/oauth/request_token',
+//    accessTokenURL: 'http://www.tumblr.com/oauth/access_token',
+//    userAuthorizationURL: 'http://www.tumblr.com/oauth/authorize',
+//    consumerKey: secrets.tumblr.consumerKey,
+//    consumerSecret: secrets.tumblr.consumerSecret,
+//    callbackURL: secrets.tumblr.callbackURL,
+//    passReqToCallback: true
+//  },
+//  function(req, token, tokenSecret, profile, done) {
+//    User.findById(req.user._id, function(err, user) {
+//      user.tokens.push({ kind: 'tumblr', accessToken: token, tokenSecret: tokenSecret });
+//      user.save(function(err) {
+//        done(err, user);
+//      });
+//    });
+//  }
+//));
+//
+//// Foursquare API setup.
+//
+//passport.use('foursquare', new OAuth2Strategy({
+//    authorizationURL: 'https://foursquare.com/oauth2/authorize',
+//    tokenURL: 'https://foursquare.com/oauth2/access_token',
+//    clientID: secrets.foursquare.clientId,
+//    clientSecret: secrets.foursquare.clientSecret,
+//    callbackURL: secrets.foursquare.redirectUrl,
+//    passReqToCallback: true
+//  },
+//  function(req, accessToken, refreshToken, profile, done) {
+//    User.findById(req.user._id, function(err, user) {
+//      user.tokens.push({ kind: 'foursquare', accessToken: accessToken });
+//      user.save(function(err) {
+//        done(err, user);
+//      });
+//    });
+//  }
+//));
+//
+//// Venmo API setup.
+//
+//passport.use('venmo', new OAuth2Strategy({
+//    authorizationURL: 'https://api.venmo.com/v1/oauth/authorize',
+//    tokenURL: 'https://api.venmo.com/v1/oauth/access_token',
+//    clientID: secrets.venmo.clientId,
+//    clientSecret: secrets.venmo.clientSecret,
+//    callbackURL: secrets.venmo.redirectUrl,
+//    passReqToCallback: true
+//  },
+//  function(req, accessToken, refreshToken, profile, done) {
+//    User.findById(req.user._id, function(err, user) {
+//      user.tokens.push({ kind: 'venmo', accessToken: accessToken });
+//      user.save(function(err) {
+//        done(err, user);
+//      });
+//    });
+//  }
+//));
 
 // Login Required middleware.
 
