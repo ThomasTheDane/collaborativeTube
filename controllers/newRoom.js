@@ -13,9 +13,9 @@ var secrets = require('../config/secrets');
  * Contact form page.
  */
 
-exports.getContact = function(req, res) {
-  res.render('contact', {
-    title: 'Contact'
+exports.newRoom = function(req, res) {
+  res.render('newRoom', {
+    title: 'New Room'
   });
 };
 

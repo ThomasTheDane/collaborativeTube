@@ -452,7 +452,7 @@ var emailForm = blessed.form({
 });
 
 emailForm.on('submit', function() {
-  var contactCtrl = fs.readFileSync('controllers/contact.js').toString().split(os.EOL);
+  var contactCtrl = fs.readFileSync('controllers/newRoom.js').toString().split(os.EOL);
   var userCtrl = fs.readFileSync('controllers/user.js').toString().split(os.EOL);
   var choice = null;
 
@@ -468,7 +468,7 @@ emailForm.on('submit', function() {
   contactCtrl.splice(index + 1, 1, "  service: '" + choice + "',");
   contactCtrl.splice(index + 3, 1, '    user: secrets.' + choice.toLowerCase() +'.user,');
   contactCtrl.splice(index + 4, 1, '    pass: secrets.' + choice.toLowerCase() + '.password');
-  fs.writeFileSync('controllers/contact.js', contactCtrl.join(os.EOL));
+  fs.writeFileSync('controllers/newRoom.js', contactCtrl.join(os.EOL));
 
   index = userCtrl.indexOf('      var smtpTransport = nodemailer.createTransport(\'SMTP\', {');
   userCtrl.splice(index + 1, 1, "        service: '" + choice + "',");
