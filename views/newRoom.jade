@@ -7,11 +7,36 @@ block content
   form(method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
       .col-sm-8.col-sm-offset-2
-          .form-group
-              label.control-label(for='email') Room Name
-              input.form-control(type='text', name='email', id='email', placeholder='Room Name', autofocus=true)
-          .form-group
-              button.btn.btn-success(type='submit')
-                  i.fa.fa-youtube-play
-                  | Create
-          hr
+        .form-group
+          label.control-label(for='roomName') Room Name
+          input.form-control(type='text', name='roomName', id='text', placeholder='Room Name', autofocus=true, required)
+
+        if !user
+          label.control-label(for='adminPass') Admin Passphrase
+          input.form-control(type='text', name='adminPassphrase', placeholder='Admin Password', autofocus=true)
+
+        p
+        label.control-label(for='adminPass') Room Description
+        input.form-control(type='text', name='roomDescription', id='text', placeholder='Description', autofocus=true)
+
+        p
+        label.control-label(for='public') Show my name on the room: &nbsp;
+        input(id='agreement', type='checkbox', name='publicSeeName', checked=true)
+
+        br
+        label.control-label(for='public') Anyone with url can:
+        p
+          | &nbsp;&nbsp;&nbsp;&nbsp;
+          input(id='agreement', type='checkbox', name='publicCanAdd', checked=true)
+          |   Add Videos
+
+          br
+          |&nbsp;&nbsp;&nbsp;&nbsp;
+          input(id='agreement', type='checkbox', name='publicCanDelete')
+          |   Delete Videos
+
+        .form-group
+          button.btn.btn-success(type='submit')
+            i.fa.fa-youtube-play
+              |   Create
+        hr
