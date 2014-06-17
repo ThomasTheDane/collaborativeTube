@@ -49,7 +49,6 @@ exports.postNewRoom = function(req, res){
       return res.redirect('/newRoom');
     }
 
-    console.log('redirecting after creating room');
     return res.redirect('/room/'+name);
 
   }, function(err){

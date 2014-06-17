@@ -11,6 +11,13 @@ var OAuthStrategy = require('passport-oauth').OAuthStrategy; // Tumblr
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy; // Venmo, Foursquare
 var User = require('../models/User');
 var secrets = require('./secrets');
+var FirebaseTokenGenerator = require("firebase-token-generator");
+
+generateFirebaseToken = function(userId){
+  console.log('gen fire token');
+  var tokenGenerator = new FirebaseTokenGenerator("VmiHeQQuG7y0bNp0iz6xZDFcn5qryvUkjBmPgw3F");
+  var token = tokenGenerator.createToken({id: userId}, {expires: 32959879280});
+};
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -72,6 +79,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
     if (!user) return done(null, false, { message: 'Email ' + email + ' not found'});
     user.comparePassword(password, function(err, isMatch) {
       if (isMatch) {
+
         return done(null, user);
       } else {
         return done(null, false, { message: 'Invalid email or password.' });
@@ -126,6 +134,7 @@ passport.use(new FacebookStrategy(secrets.facebook, function(req, accessToken, r
           done(err);
         } else {
           var user = new User();
+          user.tokens.push({kind: 'firebase', accessToken: generateFirebaseToken(user.id) });
           user.email = profile._json.email;
           user.facebook = profile.id;
           user.tokens.push({ kind: 'facebook', accessToken: accessToken });
@@ -174,6 +183,7 @@ passport.use(new GitHubStrategy(secrets.github, function(req, accessToken, refre
           done(err);
         } else {
           var user = new User();
+          user.tokens.push({kind: 'firebase', accessToken: generateFirebaseToken(user.id) });
           user.email = profile._json.email;
           user.github = profile.id;
           user.tokens.push({ kind: 'github', accessToken: accessToken });
@@ -217,6 +227,7 @@ passport.use(new TwitterStrategy(secrets.twitter, function(req, accessToken, tok
     User.findOne({ twitter: profile.id }, function(err, existingUser) {
       if (existingUser) return done(null, existingUser);
       var user = new User();
+      user.tokens.push({kind: 'firebase', accessToken: generateFirebaseToken(user.id) });
       // Twitter will not provide an email address.  Period.
       // But a person’s twitter username is guaranteed to be unique
       // so we can "fake" a twitter email address as follows:
@@ -264,6 +275,7 @@ passport.use(new GoogleStrategy(secrets.google, function(req, accessToken, refre
           done(err);
         } else {
           var user = new User();
+          user.tokens.push({kind: 'firebase', accessToken: generateFirebaseToken(user.id) });
           user.email = profile._json.email;
           user.google = profile.id;
           user.tokens.push({ kind: 'google', accessToken: accessToken });

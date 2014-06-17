@@ -5,6 +5,13 @@ var nodemailer = require('nodemailer');
 var passport = require('passport');
 var User = require('../models/User');
 var secrets = require('../config/secrets');
+var FirebaseTokenGenerator = require("firebase-token-generator");
+
+generateFirebaseToken = function(userId){
+  console.log('gen fire token');
+  var tokenGenerator = new FirebaseTokenGenerator("VmiHeQQuG7y0bNp0iz6xZDFcn5qryvUkjBmPgw3F");
+  var token = tokenGenerator.createToken({id: userId}, {expires: 32959879280});
+};
 
 /**
  * GET /login
@@ -35,6 +42,7 @@ exports.postLogin = function(req, res, next) {
     req.flash('errors', errors);
     return res.redirect('/login');
   }
+  console.log('start login');
 
   passport.authenticate('local', function(err, user, info) {
     if (err) return next(err);
@@ -42,8 +50,10 @@ exports.postLogin = function(req, res, next) {
       req.flash('errors', { msg: info.message });
       return res.redirect('/login');
     }
+    console.log('log in first cut passed');
     req.logIn(user, function(err) {
       if (err) return next(err);
+      console.log('user logged in');
       req.flash('success', { msg: 'Success! You are logged in.' });
       res.redirect(req.session.returnTo || '/');
     });
@@ -95,6 +105,8 @@ exports.postSignup = function(req, res, next) {
     email: req.body.email,
     password: req.body.password
   });
+
+  user.tokens.push({kind: 'firebase', accessToken: generateFirebaseToken(user.id) });
 
   User.findOne({ email: req.body.email }, function(err, existingUser) {
     if (existingUser) {
@@ -361,7 +373,7 @@ exports.postForgot = function(req, res, next) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'hackathon@starter.com',
+        from: 'collaborativeTube@starter.com',
         subject: 'Reset your password on Hackathon Starter',
         text: 'You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
