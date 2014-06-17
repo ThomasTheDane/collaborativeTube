@@ -17,6 +17,7 @@ generateFirebaseToken = function(userId){
   console.log('gen fire token');
   var tokenGenerator = new FirebaseTokenGenerator("VmiHeQQuG7y0bNp0iz6xZDFcn5qryvUkjBmPgw3F");
   var token = tokenGenerator.createToken({id: userId}, {expires: 32959879280});
+  return token;
 };
 
 passport.serializeUser(function(user, done) {

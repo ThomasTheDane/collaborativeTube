@@ -10,7 +10,8 @@ var FirebaseTokenGenerator = require("firebase-token-generator");
 generateFirebaseToken = function(userId){
   console.log('gen fire token');
   var tokenGenerator = new FirebaseTokenGenerator("VmiHeQQuG7y0bNp0iz6xZDFcn5qryvUkjBmPgw3F");
-  var token = tokenGenerator.createToken({id: userId}, {expires: 32959879280});
+  var token = tokenGenerator.createToken({id: userId});
+  return token;
 };
 
 /**
@@ -105,8 +106,9 @@ exports.postSignup = function(req, res, next) {
     email: req.body.email,
     password: req.body.password
   });
-
-  user.tokens.push({kind: 'firebase', accessToken: generateFirebaseToken(user.id) });
+  var firebaseToken = generateFirebaseToken(user.id);
+  console.log('new token: ' + firebaseToken);
+  user.tokens.push({kind: 'firebase', accessToken: firebaseToken });
 
   User.findOne({ email: req.body.email }, function(err, existingUser) {
     if (existingUser) {

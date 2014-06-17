@@ -65,7 +65,6 @@ var csrfExclude = ['/url1', '/url2'];
 /**
  * Express configuration.
  */
-
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -98,6 +97,12 @@ app.use(function(req, res, next) {
 app.use(function(req, res, next) {
   // Make user object available in templates.
   res.locals.user = req.user;
+  res.locals._ = require('underscore');
+  if(req.user) {
+    res.locals.firebaseToken = (_.find(req.user.tokens, function (token) {
+      return token.kind == 'firebase';
+    })).accessToken
+  }
   next();
 });
 app.use(function(req, res, next) {
@@ -110,7 +115,6 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
-
 /**
  * Main routes.
  */
@@ -171,7 +175,6 @@ app.get('/api/yahoo', apiController.getYahoo);
 //});
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
-  res.locals.user.generateFirebaseToken();
   res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/github', passport.authenticate('github'));

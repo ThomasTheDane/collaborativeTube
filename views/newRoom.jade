@@ -40,4 +40,17 @@ block content
           i.fa.fa-youtube-play
             |   Create
       hr
-  
+
+  script(src='https://cdn.firebase.com/js/client/1.0.15/firebase.js')
+  script.
+    var firebaseToken = "!{firebaseToken}";
+    var roomsRef = new Firebase("https://ourtube.firebaseio.com/rooms/");
+    // Log me in.
+    dataRef = new Firebase('https://ourtube.firebaseio.com/rooms');
+    dataRef.auth(firebaseToken, function(error) {
+      if(error) {
+        console.log("Login Failed!", error);
+      } else {
+        console.log("Login Succeeded!");
+      }
+    });
