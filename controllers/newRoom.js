@@ -23,20 +23,24 @@ exports.newRoom = function(req, res) {
 exports.postNewRoom = function(req, res){
   req.assert('roomName', 'Name cannot be blank').notEmpty();
 
-  var name = req.body.roomName;
-  var adminPass = req.body.adminPass;
+  var name = req.body.roomName.toLowerCase();
+  var adminPass = req.body.adminPass || null;
+  var creator = req.body.creator || "Anonymous";
+  var orphan = (creator == "Anonymous");
+
   var description = req.body.roomDescription;
-  var publicSeeName = req.body.publicSeeName;
-  var publicCanAdd = req.body.publicCanAdd;
-  var publicCanDelete = req.body.publicCanDelete;
-  console.log(name + " " + description + " " + publicSeeName + " " + adminPass+" " +publicCanAdd+" " +publicCanDelete);
+  var publicCanSeeCreator = (req.body.publicCanSeeCreator == "on") || false;
+  var publicCanAdd = req.body.publicCanAdd == "on";
+  var publicCanDelete = req.body.publicCanDelete == "on";
 
   var roomsRef = new Firebase('https://ourtube.firebaseIO.com/rooms/' + name);
   //listen to see if room already exists
   roomsRef.once('value', function(data){
     console.log('pong off firebase');
     if(data.val() == null){
-      roomsRef.set({description: description, date: (new Date).toDateString(), time: (new Date).toTimeString()});
+      roomsRef.set(
+        {orphan: orphan, adminPass: adminPass, creator:creator, description: description, publicCanSeeCreator:publicCanSeeCreator, publicCanAdd: publicCanAdd, publicCanDelete: publicCanDelete,  date: (new Date).toDateString(), time: (new Date).toTimeString()}
+      );
     }else{
       console.log('room already exists');
       req.assert('', 'Room already exists, please pick a different name').notEmpty();

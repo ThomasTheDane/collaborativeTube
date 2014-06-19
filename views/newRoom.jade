@@ -7,32 +7,34 @@ block content
   form(method='POST')
     input(type='hidden', name='_csrf', value=_csrf)
     .col-sm-8.col-sm-offset-2
-      .form-group
-        label.control-label(for='roomName') Room Name
-        input.form-control(type='text', name='roomName', id='text', placeholder='Room Name', autofocus=true, required)
+      label.control-label(for='roomName') Room Name
+      input.form-control(type='text', name='roomName', placeholder='Room Name', autofocus=true, required)
 
       if !user
         label.control-label(for='adminPass') Admin Passphrase
-        input.form-control(type='text', name='adminPassphrase', placeholder='Admin Password', autofocus=true)
+        input.form-control(type='text', name='adminPass', placeholder='Admin Password', autofocus=true)
+      else
+        input(type='hidden', name='creator', value="#{ user.id }")
 
       p
-      label.control-label(for='adminPass') Room Description
-      input.form-control(type='text', name='roomDescription', id='text', placeholder='Description', autofocus=true)
+      label.control-label(for='roomDescription') Room Description
+      input.form-control(type='text', name='roomDescription', placeholder='Description', autofocus=true)
 
-      p
-      label.control-label(for='public') Show I created the room: &nbsp;
-      input(id='agreement', type='checkbox', name='publicSeeName', checked=true)
+      if user
+        p
+        label.control-label(for='publicCanSeeCreator') Show I created the room: &nbsp;
+        input(, type='checkbox', name='publicCanSeeCreator', checked=true)
 
       br
-      label.control-label(for='public') Anyone with url can:
+      label.control-label(for='publicCanAdd') Anyone with url can:
       p
         | &nbsp;&nbsp;&nbsp;&nbsp;
-        input(id='agreement', type='checkbox', name='publicCanAdd', checked=true)
+        input(, type='checkbox', name='publicCanAdd', checked=true)
         |   Add Videos
 
         br
         |&nbsp;&nbsp;&nbsp;&nbsp;
-        input(id='agreement', type='checkbox', name='publicCanDelete')
+        input(, type='checkbox', name='publicCanDelete')
         |   Delete Videos
 
       .form-group
@@ -44,7 +46,7 @@ block content
   script(src='https://cdn.firebase.com/js/client/1.0.15/firebase.js')
   script.
     var firebaseToken = "!{firebaseToken}";
-    var roomsRef = new Firebase("https://ourtube.firebaseio.com/rooms/");
+    var roomsRef = new Firebase("https://ourtube.firebaseio.com/");
     // Log me in.
     dataRef = new Firebase('https://ourtube.firebaseio.com/rooms');
     dataRef.auth(firebaseToken, function(error) {
