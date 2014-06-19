@@ -1,0 +1,15 @@
+extends layout
+block content
+  .page-header
+    h3 Find a Room To Join
+
+  form(method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .col-sm-8.col-sm-offset-2
+      label.control-label(for='roomName') Room Name
+      input.form-control(type='text', name='roomName', placeholder='Room Name', autofocus=true, required)
+      br
+      .form-group
+        button.btn.btn-success(type='submit')
+          i.fa.fa-youtube-play
+          | Load

@@ -29,6 +29,7 @@ var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
 var newRoomController = require('./controllers/newRoom');
+var roomController = require('./controllers/room');
 
 /**
  * API keys and Passport configuration.
@@ -101,7 +102,7 @@ app.use(function(req, res, next) {
   if(req.user) {
     res.locals.firebaseToken = (_.find(req.user.tokens, function (token) {
       return token.kind == 'firebase';
-    })).accessToken
+    })).accessToken;
   }
   next();
 });
@@ -122,6 +123,9 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
 app.get('/', homeController.index);
 app.get('/newRoom', newRoomController.newRoom);
 app.post('/newRoom', newRoomController.postNewRoom);
+app.get('/room', roomController.findRoom);
+app.post('/room', roomController.redirectToRoom);
+app.get('/room/:roomName', roomController.getRoom);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
