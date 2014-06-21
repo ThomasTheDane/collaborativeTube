@@ -6,3 +6,35 @@ block content
     .col-md-4
       div(id='playlistArea')
         | HI HI HI
+
+  script(src="https://www.youtube.com/player_api")
+  script.
+    var youtubePlayer;
+    function onYouTubePlayerAPIReady() {
+      console.log('youtube api ready');
+      youtubePlayer = new YT.Player('player', {
+        height: '390',
+        width: '640',
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange,
+          'onError': onPlayerError
+        }
+      });
+    }
+    function onPlayerReady(event) {
+      console.log('player ready');
+      youtubePlayer.loadPlaylist(['dfkiJXnSRM8','dfkiJXnSRM8','dfkiJXnSRM8']);
+
+    }
+
+    function onPlayerStateChange(event) {
+      if(event.data === 0) {
+
+      }
+    }
+
+    function onPlayerError(event){
+      window.debugTest = event;
+      console.log('player error');
+    }

@@ -99,6 +99,7 @@ app.use(function(req, res, next) {
   // Make user object available in templates.
   res.locals.user = req.user;
   res.locals._ = require('underscore');
+  res.locals.$ = require('jquery');
   if(req.user) {
     res.locals.firebaseToken = (_.find(req.user.tokens, function (token) {
       return token.kind == 'firebase';
