@@ -5,7 +5,11 @@ exports.findRoom = function(req, res){
 };
 
 exports.getRoom = function(req, res){
-
+  var roomName = req.params.roomName;
+  res.render('room', {
+    title: roomName,
+    roomName: roomName
+  });
 };
 
 exports.redirectToRoom = function(req, res){
