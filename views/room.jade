@@ -1,11 +1,24 @@
 extends layout
 block content
   .row
-    .col-lg-7.testBorder
+    .col-lg-7.testBorder.noPadding
       div(id='player')
-    .col-lg-5.testBorder
+      div(id='controls')
+        |playlist controls
+    .col-lg-5.testBorder.noPadding
       div(id='playlistArea')
         | HI HI HI
+      div(id='addSection')
+        form(method='POST')
+          .form-group
+            input(type='hidden', name='_csrf', value=_csrf)
+            .input-group
+              input.form-control(type='text')
+              span.input-group-btn
+                button.btn.btn-success#addVideoButton(type='button') Add!
+
+
+
 
   script(src="https://www.youtube.com/player_api")
   script.
@@ -13,8 +26,8 @@ block content
     function onYouTubePlayerAPIReady() {
       console.log('youtube api ready');
       youtubePlayer = new YT.Player('player', {
-        height: '390',
-        width: '640',
+        height: '411',
+        width: '675',
         events: {
           'onReady': onPlayerReady,
           'onStateChange': onPlayerStateChange,

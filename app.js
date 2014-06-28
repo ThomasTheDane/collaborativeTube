@@ -122,6 +122,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
  */
 
 app.get('/', homeController.index);
+app.post('/', roomController.redirectToRoom);
 app.get('/newRoom', newRoomController.newRoom);
 app.post('/newRoom', newRoomController.postNewRoom);
 app.get('/room', roomController.findRoom);
