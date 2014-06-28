@@ -14,10 +14,18 @@ block content
               input.form-control(type='text', id='addVideoTextfield')
               span.input-group-btn
                 button.btn.btn-success#addVideoButton(type='button') Add!
-
-
-
-
+  script(src='https://cdn.firebase.com/js/client/1.0.15/firebase.js')
+  script.
+    var firebaseToken = "!{firebaseToken}";
+    // Log me in.
+    var roomRef = new Firebase('https://ourtube.firebaseio.com/rooms/!{roomName}');
+    roomRef.auth(firebaseToken, function(error) {
+      if(error) {
+        console.log("Login Failed!", error);
+      } else {
+        console.log("Login Succeeded!");
+      }
+    });
   script(src="https://www.youtube.com/player_api")
   script.
     var youtubePlayer;

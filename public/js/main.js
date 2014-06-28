@@ -4,7 +4,7 @@ $(document).ready(function() {
   var videoArea = _.template(
     "<div class='videoInfoArea'>" +
       "<div class='col-xs-2'>" +
-        "<img src='<%- videoThumbnailUrl %>' class='videoInfoThumbnail' />" +
+        "<img src='http://img.youtube.com/vi/<%- videoId %>/2.jpg' class='videoInfoThumbnail' />" +
       "</div>" +
       "<div class='col-xs-10 videoInfoTextArea'>" +
         "<div class='row videoInfoTitle'>" +
@@ -17,14 +17,34 @@ $(document).ready(function() {
       "</div>" +
     "</div>"
   );
+
   $('#addVideoButton').click(function(e){
     var url = $('#addVideoTextfield').val().split('v=')[1];
-    console.log(url);
-    $.get('http://gdata.youtube.com/feeds/api/videos/' + url, function (reply, status){
-      var title = $(reply).find('title').text();
-      title = title.substring(0, title.length/2);
-      var author = $(reply).find('author').text().split('http://')[0];
-      $('#playlistArea').append(videoArea({videoThumbnailUrl: "https://i1.ytimg.com/vi_webp/OQAPGmHunJc/mqdefault.webp",videoTitle: "dickBUTT Butt with dicks dickbutt", videoAuthor: "just dickbutt"}));
-    });
+
+    //add to firebase
+    if(roomRef){
+      roomRef.child('videos').push(url);
+    }else{
+      alert("Problem connecting to room, I'm sorry");
+    }
   });
+
+  if(roomRef){
+    listenToFire();
+  }else{
+    window.setTimeout(listenToFire, 1000);
+  }
+  function listenToFire(){
+    console.log("listening for videos");
+    roomRef.child('videos').on('child_added', function(snapshot){
+      var url = snapshot.val();
+      $.get('http://gdata.youtube.com/feeds/api/videos/' + url, function (reply, status){
+        var title = $(reply).find('title').text();
+        title = title.substring(0, title.length/2);
+        var author = $(reply).find('author').text().split('http://')[0];
+        $('#playlistArea').append(videoArea({videoId: url,videoTitle: title, videoAuthor: author}));
+        $('#addVideoTextfield').val('');
+      });
+    });
+  }
 });
