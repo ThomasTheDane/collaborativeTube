@@ -7,13 +7,11 @@ block content
         |playlist controls
     .col-lg-5.testBorder.noPadding
       div(id='playlistArea')
-        | HI HI HI
       div(id='addSection')
         form(method='POST')
           .form-group
-            input(type='hidden', name='_csrf', value=_csrf)
             .input-group
-              input.form-control(type='text')
+              input.form-control(type='text', id='addVideoTextfield')
               span.input-group-btn
                 button.btn.btn-success#addVideoButton(type='button') Add!
 

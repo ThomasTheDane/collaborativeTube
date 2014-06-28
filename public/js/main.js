@@ -18,6 +18,13 @@ $(document).ready(function() {
     "</div>"
   );
   $('#addVideoButton').click(function(e){
-    $('#playlistArea').append(videoArea({videoThumbnailUrl: "https://i1.ytimg.com/vi_webp/OQAPGmHunJc/mqdefault.webp",videoTitle: "dickBUTT Butt with dicks dickbutt", videoAuthor: "just dickbutt"}));
+    var url = $('#addVideoTextfield').val().split('v=')[1];
+    console.log(url);
+    $.get('http://gdata.youtube.com/feeds/api/videos/' + url, function (reply, status){
+      var title = $(reply).find('title').text();
+      title = title.substring(0, title.length/2);
+      var author = $(reply).find('author').text().split('http://')[0];
+      $('#playlistArea').append(videoArea({videoThumbnailUrl: "https://i1.ytimg.com/vi_webp/OQAPGmHunJc/mqdefault.webp",videoTitle: "dickBUTT Butt with dicks dickbutt", videoAuthor: "just dickbutt"}));
+    });
   });
 });
