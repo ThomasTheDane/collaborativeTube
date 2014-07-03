@@ -1,4 +1,5 @@
 var Firebase = require('firebase');
+var secrets = require('../config/secrets');
 
 exports.newRoom = function(req, res) {
   res.render('newRoom', {
@@ -18,14 +19,24 @@ exports.postNewRoom = function(req, res){
   var publicCanSeeCreator = (req.body.publicCanSeeCreator == "on") || false;
   var publicCanAdd = req.body.publicCanAdd == "on";
   var publicCanDelete = req.body.publicCanDelete == "on";
+  var publicShowcase = req.body.showRoomPublicly == "on";
 
   var roomsRef = new Firebase('https://ourtube.firebaseIO.com/rooms/' + name);
+  roomsRef.auth(secrets.firebaseSecret);
   //listen to see if room already exists
   roomsRef.once('value', function(data){
     console.log('pong off firebase');
     if(data.val() == null){
       roomsRef.set(
-        {orphan: orphan, adminPass: adminPass, creator:creator, description: description, publicCanSeeCreator:publicCanSeeCreator, publicCanAdd: publicCanAdd, publicCanDelete: publicCanDelete,  date: (new Date).toDateString(), time: (new Date).toTimeString()}
+        {orphan: orphan, adminPass: adminPass, creator:creator, description: description, publicCanSeeCreator:publicCanSeeCreator, publicCanAdd: publicCanAdd, publicCanDelete: publicCanDelete,  date: (new Date).toDateString(), time: (new Date).toTimeString()},
+        function(error) {
+          var roomList = new Firebase('https://ourtube.firebaseIO.com/roomList');
+          if(publicShowcase){
+            roomList.child('public').push(name);
+          }else{
+            roomList.child('private').push(name);
+          }
+        }
       );
     }else{
       console.log('room already exists');

@@ -15,7 +15,7 @@ var FirebaseTokenGenerator = require("firebase-token-generator");
 
 generateFirebaseToken = function(userId){
   console.log('gen fire token');
-  var tokenGenerator = new FirebaseTokenGenerator("VmiHeQQuG7y0bNp0iz6xZDFcn5qryvUkjBmPgw3F");
+  var tokenGenerator = new FirebaseTokenGenerator(secrets.firebaseSecret);
   var token = tokenGenerator.createToken({id: userId}, {expires: 32959879280});
   return token;
 };

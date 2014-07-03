@@ -3,7 +3,7 @@ block content
   .row
     .col-lg-7.testBorder.noPadding
       div(id='player')
-      div(id='controls')
+      div(id='videoControls')
         |playlist controls
     .col-lg-5.testBorder.noPadding
       div(id='playlistArea')
@@ -14,12 +14,20 @@ block content
               input.form-control(type='text', id='addVideoTextfield')
               span.input-group-btn
                 button.btn.btn-success#addVideoButton(type='button') Add!
+  .row#privledges
+    .col-lg-12
+      |Your permissions for this room are:
+      ul#listPermissions
+        li.permissionItem
+          |Add Videos
+        li.permissionItem
+          |Delete Videos
   script(src='https://cdn.firebase.com/js/client/1.0.15/firebase.js')
   script.
     var firebaseToken = "!{firebaseToken}";
     // Log me in.
-    var roomRef = new Firebase('https://ourtube.firebaseio.com/rooms/!{roomName}');
-    roomRef.auth(firebaseToken, function(error) {
+    var roomVideosRef = new Firebase('https://ourtube.firebaseio.com/rooms/!{roomName}/videos');
+    roomVideosRef.auth(firebaseToken, function(error) {
       if(error) {
         console.log("Login Failed!", error);
       } else {

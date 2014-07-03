@@ -10,20 +10,17 @@ block content
       label.control-label(for='roomName') Room Name
       input.form-control(type='text', name='roomName', placeholder='Room Name', autofocus=true, required)
 
-      if !user
-        label.control-label(for='adminPass') Admin Passphrase
-        input.form-control(type='text', name='adminPass', placeholder='Admin Password', autofocus=true)
-      else
-        input(type='hidden', name='creator', value="#{ user.id }")
-
       p
       label.control-label(for='roomDescription') Room Description
       input.form-control(type='text', name='roomDescription', placeholder='Description', autofocus=true)
 
-      if user
-        p
-        label.control-label(for='publicCanSeeCreator') Show I created the room: &nbsp;
-        input(type='checkbox', name='publicCanSeeCreator', checked=true)
+      if !user
+        br
+        label.control-label(for='adminPass') Admin Passphrase
+        .help-block Knowing this gives user all permissions
+        input.form-control(type='text', name='adminPass', placeholder='Admin Password', autofocus=true)
+      else
+        input(type='hidden', name='creator', value="#{ user.id }")
 
       br
       label.control-label(for='publicCanAdd') Anyone with url can:
@@ -36,6 +33,9 @@ block content
         |&nbsp;&nbsp;&nbsp;&nbsp;
         input(, type='checkbox', name='publicCanDelete')
         |   Delete Videos
+      p
+      label.control-label(for='showRoomPublicly') Showcase room & description on public list: &nbsp;
+      input(type='checkbox', name='showRoomPublicly', checked=true)
 
       .form-group
         button.btn.btn-success(type='submit')

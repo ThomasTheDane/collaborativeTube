@@ -22,21 +22,21 @@ $(document).ready(function() {
     var url = $('#addVideoTextfield').val().split('v=')[1];
 
     //add to firebase
-    if(roomRef){
-      roomRef.child('videos').push(url);
+    if(roomVideosRef){
+      roomVideosRef.push(url);
     }else{
       alert("Problem connecting to room, I'm sorry");
     }
   });
 
-  if(roomRef){
+  if(roomVideosRef){
     listenToFire();
   }else{
     window.setTimeout(listenToFire, 1000);
   }
   function listenToFire(){
-    console.log("listening for videos");
-    roomRef.child('videos').on('child_added', function(snapshot){
+    console.log('listen to fire');
+    roomVideosRef.on('child_added', function(snapshot){
       var url = snapshot.val();
       $.get('http://gdata.youtube.com/feeds/api/videos/' + url, function (reply, status){
         var title = $(reply).find('title').text();
