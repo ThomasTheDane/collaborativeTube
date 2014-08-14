@@ -13,6 +13,7 @@ exports.postNewRoom = function(req, res){
   var name = req.body.roomName.toLowerCase();
   var adminPass = req.body.adminPass || null;
   var creator = req.body.creator || "Anonymous";
+  var creatorId = req.body.creatorId;
   var orphan = (creator == "Anonymous");
 
   var description = req.body.roomDescription;
@@ -28,7 +29,7 @@ exports.postNewRoom = function(req, res){
     console.log('pong off firebase');
     if(data.val() == null){
       roomsRef.set(
-        {orphan: orphan, adminPass: adminPass, creator:creator, description: description, publicCanSeeCreator:publicCanSeeCreator, publicCanAdd: publicCanAdd, publicCanDelete: publicCanDelete,  date: (new Date).toDateString(), time: (new Date).toTimeString()},
+//        {orphan: orphan, adminPass: adminPass, creator:creator, permission:{} description: description, publicCanSeeCreator:publicCanSeeCreator, publicCanAdd: publicCanAdd, publicCanDelete: publicCanDelete,  date: (new Date).toDateString(), time: (new Date).toTimeString()},
         function(error) {
           var roomList = new Firebase('https://ourtube.firebaseIO.com/roomList');
           if(publicShowcase){

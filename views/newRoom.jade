@@ -14,13 +14,14 @@ block content
       label.control-label(for='roomDescription') Room Description
       input.form-control(type='text', name='roomDescription', placeholder='Description', autofocus=true)
 
+      //planning on getting rid of the admin passphrase opion. Make a room either public or private. If public anyone can add and no one can delete. If private, you can add people to give them permissions and specify public permissions
       if !user
         br
         label.control-label(for='adminPass') Admin Passphrase
         .help-block Knowing this gives user all permissions
         input.form-control(type='text', name='adminPass', placeholder='Admin Password', autofocus=true)
       else
-        input(type='hidden', name='creator', value="#{ user.id }")
+        input(type='hidden', name='creator', value="#{ user.profile.name }")
 
       br
       label.control-label(for='publicCanAdd') Anyone with url can:
